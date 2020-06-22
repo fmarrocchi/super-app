@@ -1,0 +1,26 @@
+$basicColor: #B03F3F;
+$backgroundColor: #DCDCDC;
+
+@media only screen and (max-width: 600px){ 
+  .header {
+    max-height: 200px;
+  }
+  .headerIcon{
+    max-height: 30%;
+  }
+}
+
+.headerIcon{
+  margin-top: 2%;
+  width:auto;
+  height:auto;
+}
+
+.header {           
+  background-size: cover;        
+  width: 100%;
+  min-height: auto;
+  max-height: auto;
+  height: 400px;
+  padding-right: 2%;
+}

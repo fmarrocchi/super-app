@@ -1,0 +1,25 @@
+$basicColor: #B03F3F;
+$backgroundColor: #DCDCDC;
+
+@media only screen and (max-width: 600px){ 
+  .signButton {
+    width: 100% !important;
+    margin-top: 5px;
+  }  
+  .cancelButton {
+    width: 100% !important;
+    margin-bottom: 5px;
+  }  
+}
+
+.catalogContainer{
+  background-color: white;
+  margin-left: 4% !important;
+  margin-right: 4% !important;
+  margin-top: -60px !important;
+  max-height: 600px !important;
+  height:auto;
+  color: grey;
+  padding-bottom: 3% !important;
+  padding-top: 3% !important;
+}
