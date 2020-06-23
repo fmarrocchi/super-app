@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
-import users from './users';
 import login from './login';
-import userInfo from './userInfo';
+import userinfo from './userInfo';
+import catalog from './catalog';
 
 export default combineReducers({
-  userInfo,
-  users,
+  userinfo,
   login,
+  catalog, 
 });

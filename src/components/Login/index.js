@@ -10,15 +10,13 @@ class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
-      token: null,
       email: "",
       password: "",
       errors: {
         email: '',
         password: '',
         login: ''
-      },
-      userinfo: []
+      }
     };
     //binding the method restart. This binding is necessary to make `this` work in the callback
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -68,14 +66,8 @@ class Login extends Component {
     event.preventDefault();
     let email = this.state.email;
     let password = this.state.password;
-    if (this.validateForm(email, password)) {
-      let token = this.props.loginUser({"email": email, "password": password});    
-      if( token ){
-        this.setState({
-          token : token
-        })
-      }     
-    }
+    if (this.validateForm(email, password)) 
+      this.props.loginUser({"email": email, "password": password});  
   }
 
   handleChange (event) {    
@@ -91,13 +83,8 @@ class Login extends Component {
   componentDidUpdate(prevProps, prevState) {
     if(prevProps !== this.props && this.props.token ){
       let user = this.props.fetchUser( this.state.email, this.state.token);
-      this.setState({
-        userinfo: user,
-        logged: true
-      })
     }
     if (this.props.logged !== prevProps.logged && !this.props.logged ) {
-      console.log("entre "+ this.props.logged);
       let errors = {};
       errors['login'] = 'Usuario o clave incorrecta. Por favor verifique sus datos.';
       this.setState({
@@ -110,7 +97,7 @@ class Login extends Component {
     const {errors} = this.state;
     return (
       <Grid textAlign='center'  className= "signContainer">     
-            {this.props.logged ?
+            {this.props.logged==true ?
               <Redirect to={{
                 pathname: '/catalog'
               }}/>
@@ -159,7 +146,7 @@ class Login extends Component {
                   <div>
                   <span style={{color: "red"}}>{errors["login"]}</span>
                   </div>
-                  <Button className="signButton" disabled = {this.state.logged == true } onClick={this.onFormSubmit} >Ingresar</Button>
+                  <Button className="signButton" onClick={this.onFormSubmit} >Ingresar</Button>
                 </Grid.Column>
               </Grid> 
             </Form>   

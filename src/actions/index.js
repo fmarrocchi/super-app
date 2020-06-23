@@ -9,23 +9,20 @@ export const loginUser = (user) => async (dispatch) => {
       payload: {
         token
       }
-    }) 
+    });
+    //localStorage.setItem(JWT, token);
+    //history.pushState('/categories');
+    dispatch({type: "LOGIN_SUCCESS"});
   }
   catch(err) {
-    dispatch({
-      type: 'LOGIN_FAIL'
-    }) 
+    dispatch({ type: 'LOGIN_FAIL' }) 
   }
 }
 
-export const fetchUsers = () => async (dispatch) => {
-  const users = await api.get('/users');
-  dispatch({ 
-    type: 'FETCH_USERS',
-    payload: {users: users.data}
-  });
+export const logout = () => (dispatch) => {
+  //localStorage.removeItem(JWT);
+  dispatch( { type: "LOGOUT"})
 }
-
 
 export const fetchUser = (email, token) => async (dispatch) => { 
   const userinfo = await api.get(`/users?email=${email}`, {token: {token}});
@@ -33,4 +30,19 @@ export const fetchUser = (email, token) => async (dispatch) => {
     type: 'FETCH_USER',
     payload: {userinfo: userinfo.data}
   }) 
+}
+
+export const fetchCatalog = () => async (dispatch, getState) => {
+  const state = await getState();
+  dispatch({
+    type: "FETCH_CATALOG", 
+  })
+}
+
+export const fetchProducts = (token) => async (dispatch) => {
+  const products = await api.get('/products', token);
+  dispatch({ 
+    type: 'FETCH_PRODUCTS',
+    payload: {products: products.data}
+  });
 }

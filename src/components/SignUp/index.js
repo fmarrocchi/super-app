@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Button, Input, Form } from 'semantic-ui-react';
 //redux
-import { fetchUsers } from '../../actions/index';
+//import {  } from '../../actions/index';
 import { connect } from "react-redux";
 
 import { Link } from 'react-router-dom';
@@ -27,10 +27,6 @@ class SignUp extends Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.validateForm = this.validateForm.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.fetchUsers();
   }
 
   validateForm() {
@@ -157,13 +153,5 @@ class SignUp extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchUsers: () => dispatch(fetchUsers())
 });
-
-const mapStateToProps = (state) => {
-  return  {
-    users: state.users.usersList,
-  }
-}
-
-export default connect (mapStateToProps, mapDispatchToProps) (SignUp);
+export default connect (null, mapDispatchToProps) (SignUp);
