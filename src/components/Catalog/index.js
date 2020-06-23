@@ -10,14 +10,13 @@ class Catalog extends Component {
   constructor(props){
     super(props);
     this.state = {
-      name: this.props.name,
-      logged: this.props.logged
+      name: "Flor"
     };
   }
   render () { 
     return (
       <Grid textAlign='center'  className= "catalogContainer">       
-           <h2 className="formTitle">Hola {this.state.name}</h2> 
+           <h2 className="formTitle">Hola {this.state.name} </h2> 
       </Grid> 
     )}
 }

@@ -1,8 +1,8 @@
 import api from '../api/api';
 
 export const loginUser = (user) => async (dispatch) => {
-  const token="";
-  try{
+  let token = "";
+  try {
     token = await api.post('/login', user);
     dispatch({
       type: 'LOGIN_REQUEST',
@@ -10,11 +10,12 @@ export const loginUser = (user) => async (dispatch) => {
         token
       }
     }) 
-  }catch{
-      token = "error"
   }
-
-  return token; 
+  catch(err) {
+    dispatch({
+      type: 'LOGIN_FAIL'
+    }) 
+  }
 }
 
 export const fetchUsers = () => async (dispatch) => {

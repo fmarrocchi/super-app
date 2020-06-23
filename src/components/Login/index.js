@@ -10,13 +10,13 @@ class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
-      logged: false,
       token: null,
       email: "",
       password: "",
       errors: {
         email: '',
         password: '',
+        login: ''
       },
       userinfo: []
     };
@@ -74,9 +74,8 @@ class Login extends Component {
         this.setState({
           token : token
         })
-      }
+      }     
     }
-    else console.log("NO VALIDATED FORM")  
   }
 
   handleChange (event) {    
@@ -90,15 +89,19 @@ class Login extends Component {
   } 
 
   componentDidUpdate(prevProps, prevState) {
-    if(prevProps !== this.props){
+    if(prevProps !== this.props && this.props.token ){
       let user = this.props.fetchUser( this.state.email, this.state.token);
       this.setState({
-        userinfo: user
+        userinfo: user,
+        logged: true
       })
     }
-    if(prevState.userinfo !== this.state.userinfo){
+    if (this.props.logged !== prevProps.logged && !this.props.logged ) {
+      console.log("entre "+ this.props.logged);
+      let errors = {};
+      errors['login'] = 'Usuario o clave incorrecta. Por favor verifique sus datos.';
       this.setState({
-        logged: true
+        errors: errors
       })
     }
   }
@@ -107,11 +110,14 @@ class Login extends Component {
     const {errors} = this.state;
     return (
       <Grid textAlign='center'  className= "signContainer">     
-            {this.state.logged ?
+            {this.props.logged ?
               <Redirect to={{
                 pathname: '/catalog'
               }}/>
-              : ""
+              : 
+              <Redirect to={{
+                pathname: '/login'
+              }}/>
             }
            <Form success>
               <h2 className="formTitle">¡Bienvenido!</h2>
@@ -148,9 +154,12 @@ class Login extends Component {
                   <p>¿Es nuevo en Quiero En Casa? <Link to="/signup">Regístrese gratis</Link> </p>
                 </List.Item>
               </List>
-              <Grid>
-                <Grid.Column textAlign="center">
-                  <Button className="signButton" disabled = {false} onClick={this.onFormSubmit} >Ingresar</Button>
+              <Grid>               
+                <Grid.Column textAlign="center">                  
+                  <div>
+                  <span style={{color: "red"}}>{errors["login"]}</span>
+                  </div>
+                  <Button className="signButton" disabled = {this.state.logged == true } onClick={this.onFormSubmit} >Ingresar</Button>
                 </Grid.Column>
               </Grid> 
             </Form>   
@@ -165,6 +174,7 @@ const mapDispatchToProps = (dispatch)=> ({
 const mapStateToProps = (state) => {
   return  {
     token: state.login.token,
+    logged: state.login.logged
   }
 }
 export default connect (mapStateToProps, mapDispatchToProps) (Login);
