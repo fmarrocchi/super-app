@@ -21,5 +21,41 @@ $backgroundColor: #DCDCDC;
   height:auto;
   color: grey;
   padding-bottom: 3% !important;
-  padding-top: 3% !important;
+}
+
+.catalogTitle{
+  box-shadow: none !important;
+  width: 100%;
+}
+
+.groupList{
+  display: flex;
+  width: 60%;
+  height: auto;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: none !important;
+  border-left: 20%;
+  text-align: center;
+}
+
+.ui.card, .ui.cards .card .content{
+  border: none;
+}
+
+.ui.circular.image{
+  background-color: $backgroundColor;
+  width: 70px;
+  height: 70px;
+  border: 2px solid;
+  border-color: $basicColor;
+  margin-bottom: 10px;
+}
+
+.titleGroup{
+  color:black;
+  border-bottom: none; //.3rem solid $basicColor;
+  width: 3rem;
+  margin: 0 1rem;
+  transform: translateY(-2rem);
 }
