@@ -25,7 +25,6 @@ class Catalog extends Component {
       selectedGroup: null,
       selectedCategory: null,
     }
-
     //bind
     this.onGroupClick = this.onGroupClick.bind(this);
   }
@@ -43,7 +42,7 @@ class Catalog extends Component {
       this.props.fetchCategories(this.props.token, this.state.selectedGroup);
     }
 
-    if(prevState.selectedCategory !== this.state.selectedCategory){
+    if(prevState.selectedCategory !== this.state.selectedCategory && this.state.selectedCategory !== null){
       this.props.fetchSubCategories(this.props.token, this.state.selectedCategory);
     }
   }
@@ -82,7 +81,7 @@ class Catalog extends Component {
               {
               this.props.groups
                 .map((group, index) => { 
-                  return <div key={index} onClick={() => {this.setState({selectedGroup: group.id})}}>
+                  return <div key={index} onClick={() => {this.setState({selectedGroup: group.id, selectedCategory: null})}}>
                             <Link className="titleGroup" >
                               <Image src={images[group.id-1]}  circular/>
                               {group.name}
@@ -93,17 +92,30 @@ class Catalog extends Component {
               </Segment>   
 
               <Grid.Row> 
-              {
-                this.props.categories
-                  .map((category, index) => {
-                    return <Card                       
-                              key={index}
-                              className= "categoryCard"
-                              onClick={() => {this.setState({selectedCategory: category.id})}}>            
-                              {category.name}
-                            </Card>
-                  })    
-                }
+                <Card.Group className="categories">
+                  {
+                    this.props.categories
+                      .map((category, index) => {
+                        return <Card                       
+                                  key={index}
+                                  className= "categoryCard"
+                                  onClick={() => {this.setState({selectedCategory: category.id})}}>  
+                                  {
+                                    this.state.selectedCategory == category.id ?
+                                    <div> 
+                                      {this.props.subcategories
+                                        .map((subcategory, index) => {
+                                          return <div key={index}> {subcategory.name} </div>
+                                        })  }   
+                                        <div>Todos</div> 
+                                        </div>                             
+                                    :
+                                    <div>{category.name}</div>
+                                  }    
+                                </Card>
+                      })    
+                    }
+                 </Card.Group>
               </Grid.Row>
 
           </Grid> 

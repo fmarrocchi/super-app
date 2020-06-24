@@ -68,6 +68,9 @@ export const fetchCategories = (token, id) => async (dispatch) => {
 export const fetchSubCategories = (token, category) => async (dispatch) => {
   try { 
     let subcategories = await api.get(`/subcategories?categoryId=${category}`, {token: {token}} );
+    let all = {id:subcategories.data.length+1, categoryId: category, name: "Todos"};
+    let subcat = {...subcategories.data, all};
+    console.log("subcat: "+subcat);
     dispatch({
       type: 'FETCH_SUBCATEGORIES',
       payload: {subcategories: subcategories.data}
