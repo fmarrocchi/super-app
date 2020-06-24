@@ -1,12 +1,17 @@
 $backgroundColor: #DCDCDC;
 
-.footerLogos{
+.footer{  
   margin-top: 20%;
+}
+
+.footerLogos{
   background-color: white;
   height: 30px;
+  border-left: 20%;
+  text-align: center;
 }
 
 .footerText{
-  background-color: $backgroundColor;
+  background-color:#D7D4D4;
   height: 30px;  
 }

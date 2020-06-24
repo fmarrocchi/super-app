@@ -1,6 +1,7 @@
 const initialState = {
  products: [],
  categories: [],
+ subcategories: [],
  groups: [],
  err: ''
 }
@@ -23,6 +24,12 @@ export default (state=initialState, action) => {
       return {...state, categories: action.payload.categories}
     }
     case "FETCH_CATEGORIES_FAIL":{
+      return {...state, err: action.payload.err}
+    }
+    case "FETCH_SUBCATEGORIES":{
+      return {...state, subcategories: action.payload.subcategories}
+    }
+    case "FETCH_SUBCATEGORIES_FAIL":{
       return {...state, err: action.payload.err}
     }
     default: {

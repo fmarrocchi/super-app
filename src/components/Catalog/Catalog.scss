@@ -35,7 +35,6 @@ $backgroundColor: #DCDCDC;
   justify-content: space-around;
   align-items: center;
   box-shadow: none !important;
-  border-left: 20%;
   text-align: center;
 }
 
@@ -58,4 +57,17 @@ $backgroundColor: #DCDCDC;
   width: 3rem;
   margin: 0 1rem;
   transform: translateY(-2rem);
+}
+
+.ui[class*="vertically divided"].grid .row:before{
+  height: 0px;
+}
+
+.categoryCard{
+  width: 100px;
+  height: 100px;
+}
+
+.ui.card {
+  margin:  0; 
 }

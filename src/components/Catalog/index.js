@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Grid, Segment, Item, Image } from 'semantic-ui-react';
+import { Grid, Segment, Item, Image, Card } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
-import { fetchProducts, fetchCategories, fetchGroups } from '../../actions/index';
+import { fetchProducts, fetchCategories, fetchGroups, fetchSubCategories } from '../../actions/index';
 import { connect } from 'react-redux';
+import CardCategory from './../CardCategory';
 
 //images and icons
 import commerce from './../../assets/icons/commerce.png';
@@ -20,14 +21,31 @@ import './Catalog.scss';
 class Catalog extends Component {
   constructor(props){
     super(props);
-    this.state = {
-    };
+    this.state={
+      selectedGroup: null,
+      selectedCategory: null,
+    }
+
+    //bind
+    this.onGroupClick = this.onGroupClick.bind(this);
+  }
+
+  onGroupClick (e){    
+    e.preventDefault();
   }
 
   componentDidMount() {
-    console.log(this.props.token);
-    console.log(this.props.name);
     this.props.fetchGroups(this.props.token);
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.selectedGroup !== this.state.selectedGroup){
+      this.props.fetchCategories(this.props.token, this.state.selectedGroup);
+    }
+
+    if(prevState.selectedCategory !== this.state.selectedCategory){
+      this.props.fetchSubCategories(this.props.token, this.state.selectedCategory);
+    }
   }
 
   render () { 
@@ -39,39 +57,55 @@ class Catalog extends Component {
           }}/>
         }*/
       <div>      
-          <Grid textAlign='center'  className= "catalogContainer">       
+          <Grid divided="vertically" textAlign='center'  className= "catalogContainer">     
+
               <div className="ui fluid inverted borderless menu">
-                <div className="item"> <i class="align justify icon big"></i> </div>
+                <div className="item"> <i className="align justify icon big"></i> </div>
                 <a className="item">¡ Hola {this.props.name}!</a>
                 <div className="right menu">
                   <div className="item">
                     <div className="ui icon input icon">
                       <input type="text" placeholder="Search..." />
-                      <i aria-hidden="true" class="search icon"></i>
+                      <i aria-hidden="true" className="search icon"></i>
                     </div>
                   </div>
                   <div className="item"><img src={commerce}/></div>
                 </div>
               </div>
+             
               <Segment className="catalogTitle" textAlign='center'>
                 <h3> HACE TU COMPRA POR CATEGORIAS </h3> 
                 <h4> Seleccioná tus productos </h4> 
               </Segment>    
 
-              <Segment className="groupList">
+              <Segment textAlign='center' className="groupList">
               {
               this.props.groups
-                .map((group, index) => {
-                  return <div                   
-                            key={index}
-                          >
-                            <Image src={images[group.id-1]} circular/>
-                            <Link className="titleGroup">{group.name}</Link>
+                .map((group, index) => { 
+                  return <div key={index} onClick={() => {this.setState({selectedGroup: group.id})}}>
+                            <Link className="titleGroup" >
+                              <Image src={images[group.id-1]}  circular/>
+                              {group.name}
+                            </Link>
                           </div>
                 })    
               }    
-              </Segment>     
-                                  
+              </Segment>   
+
+              <Grid.Row> 
+              {
+                this.props.categories
+                  .map((category, index) => {
+                    return <Card                       
+                              key={index}
+                              className= "categoryCard"
+                              onClick={() => {this.setState({selectedCategory: category.id})}}>            
+                              {category.name}
+                            </Card>
+                  })    
+                }
+              </Grid.Row>
+
           </Grid> 
          
       </div>            
@@ -80,7 +114,8 @@ class Catalog extends Component {
 
 const mapDispatchToProps = (dispatch)=> ({
   fetchProducts: (token) => dispatch(fetchProducts(token)),
-  fetchCategories: (token) => dispatch(fetchCategories(token)),
+  fetchCategories: (token, id) => dispatch(fetchCategories(token, id)),
+  fetchSubCategories: (token, id) => dispatch(fetchSubCategories(token, id)),
   fetchGroups: (token) => dispatch(fetchGroups(token)),
 });
 const mapStateToProps = (state) => {
@@ -90,6 +125,7 @@ const mapStateToProps = (state) => {
     name: state.userinfo.name,
     products: state.catalog.products,
     categories: state.catalog.categories,
+    subcategories: state.catalog.subcategories,
     groups: state.catalog.groups,
   }
 }

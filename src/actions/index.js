@@ -41,7 +41,7 @@ export const fetchCatalog = () => async (dispatch, getState) => {
 
 export const fetchProducts = (token) => async (dispatch) => {
   try {
-    let products = await api.get('/products', token);
+    let products = await api.get('/products', {token: {token}});
     dispatch({
       type: 'FETCH_PRODUCTS',
       payload: {products: products.data}
@@ -52,9 +52,9 @@ export const fetchProducts = (token) => async (dispatch) => {
   }
 }
 
-export const fetchCategories = (token) => async (dispatch) => {
-  try {
-    let categories = await api.get('/categories', token);
+export const fetchCategories = (token, id) => async (dispatch) => {
+  try { 
+    let categories = await api.get(`/categories?groupId=${id}`,  { token: {token}});
     dispatch({
       type: 'FETCH_CATEGORIES',
       payload: {categories: categories.data}
@@ -62,6 +62,19 @@ export const fetchCategories = (token) => async (dispatch) => {
   }
   catch(err) {
     dispatch({ type: 'FETCH_CATEGORIES_FAIL', payload: err }) 
+  }
+}
+
+export const fetchSubCategories = (token, category) => async (dispatch) => {
+  try { 
+    let subcategories = await api.get(`/subcategories?categoryId=${category}`, {token: {token}} );
+    dispatch({
+      type: 'FETCH_SUBCATEGORIES',
+      payload: {subcategories: subcategories.data}
+    });
+  }
+  catch(err) {
+    dispatch({ type: 'FETCH_SUBCATEGORIES_FAIL', payload: err }) 
   }
 }
 
