@@ -32,6 +32,13 @@ export default (state=initialState, action) => {
     case "FETCH_SUBCATEGORIES_FAIL":{
       return {...state, err: action.payload.err}
     }
+    case "BUY_PRODUCT":{
+      return { ...state}
+    }
+    case "BUY_PRODUCT_FAIL":{
+      return {...state, err: action.payload.err}
+    }
+    
     default: {
       return state
     }

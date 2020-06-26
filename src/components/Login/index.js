@@ -83,6 +83,7 @@ class Login extends Component {
   componentDidUpdate(prevProps, prevState) {
     if(prevProps !== this.props && this.props.token ){
       let user = this.props.fetchUser( this.state.email, this.state.token);
+      console.log("hola "+ user.id)
     }
     if (this.props.logged !== prevProps.logged && !this.props.logged ) {
       let errors = {};

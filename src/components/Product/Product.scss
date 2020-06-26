@@ -1,0 +1,19 @@
+.ui.cards .card {
+  width: 280px;
+  margin: .8em 1.3em;
+  align-content: center;
+  text-align: center;
+}
+
+.outStock{
+  color:red;
+  font-weight: bold;
+}
+
+.buyLabel{
+  font-weight: bold;
+}
+
+.ui.card, .ui.cards .card .content {
+  text-align: right;
+}

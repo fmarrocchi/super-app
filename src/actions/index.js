@@ -28,7 +28,7 @@ export const fetchUser = (email, token) => async (dispatch) => {
   const userinfo = await api.get(`/users?email=${email}`, {token: {token}});
   dispatch({
     type: 'FETCH_USER',
-    payload: {userinfo: userinfo.data}
+    payload: {userinfo: userinfo.data[0]}
   }) 
 }
 
@@ -39,9 +39,9 @@ export const fetchCatalog = () => async (dispatch, getState) => {
   })
 }
 
-export const fetchProducts = (token) => async (dispatch) => {
+export const fetchProducts = (cat, token) => async (dispatch) => {
   try {
-    let products = await api.get('/products', {token: {token}});
+    let products = await api.get(`/products?categoryId=${cat}`, {token: {token}});
     dispatch({
       type: 'FETCH_PRODUCTS',
       payload: {products: products.data}
@@ -49,6 +49,19 @@ export const fetchProducts = (token) => async (dispatch) => {
   }
   catch(err) {
     dispatch({ type: 'FETCH_PRODUCTS_FAIL', payload: err }) 
+  }
+}
+ 
+export const fetchProductsFilterbySubCat = (cat, subcat, token) => async (dispatch) => {
+  try { 
+    let productsbysubcat = await api.get(`/products?categoryId=${cat}&subcategoryId=${subcat}`, {token: {token}});
+    dispatch({
+      type: 'FETCH_PRODUCTS_BY_SUB_CAT',
+      payload: {productsbysubcat: productsbysubcat.data}
+    });
+  }
+  catch(err) {
+    dispatch({ type: 'FETCH_PRODUCTS_BY_SUB_CAT_FAIL', payload: err }) 
   }
 }
 
@@ -68,9 +81,6 @@ export const fetchCategories = (token, id) => async (dispatch) => {
 export const fetchSubCategories = (token, category) => async (dispatch) => {
   try { 
     let subcategories = await api.get(`/subcategories?categoryId=${category}`, {token: {token}} );
-    let all = {id:subcategories.data.length+1, categoryId: category, name: "Todos"};
-    let subcat = {...subcategories.data, all};
-    console.log("subcat: "+subcat);
     dispatch({
       type: 'FETCH_SUBCATEGORIES',
       payload: {subcategories: subcategories.data}
@@ -91,5 +101,19 @@ export const fetchGroups = (token) => async (dispatch) => {
   }
   catch(err) {
     dispatch({ type: 'FETCH_GROUPS_FAIL', payload: err }) 
+  }
+}
+
+export const buyProduct = (product) => async (dispatch) => {
+  try { //http://localhost:3333/products/1
+    //let newStock = product.stock -1;
+    let id = product.id;
+    let productUpdated = [...product, {"stock": 90 } ];
+    await api.put(`/products/${id}`, productUpdated);
+    dispatch({
+      type: 'BUY_PRODUCT'
+    });
+  } catch(err) {
+    dispatch({ type: 'BUY_PRODUCT_FAIL', payload: err }) 
   }
 }

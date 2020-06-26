@@ -2,29 +2,27 @@ $basicColor: #B03F3F;
 $backgroundColor: #DCDCDC;
 
 @media only screen and (max-width: 600px){ 
-  .signButton {
-    width: 100% !important;
-    margin-top: 5px;
-  }  
-  .cancelButton {
-    width: 100% !important;
-    margin-bottom: 5px;
-  }  
+  .groupList {
+    overflow-x: scroll;
+  }
 }
 
 .catalogContainer{
-  background-color: white;
+  max-height: 600px !important;
+  height:auto;
   margin-left: 4% !important;
   margin-right: 4% !important;
   margin-top: -60px !important;
-  height:auto;
   color: grey;
+  background-color: white;  
   padding-bottom: 3% !important;
 }
 
 .catalogTitle{
   box-shadow: none !important;
   width: 100%;
+  color: grey !important;
+  padding-top: 10px !important;
 }
 
 .groupList{
@@ -50,28 +48,112 @@ $backgroundColor: #DCDCDC;
   margin-bottom: 10px;
 }
 
+.ui.circular.image:hover{
+    background-color: $basicColor;  
+}
+
 .titleGroup{
   color:black;
   border-bottom: none; //.3rem solid $basicColor;
   width: 3rem;
   margin: 0 1rem;
-  transform: translateY(-2rem);
+  transform: translateY(-2rem);  
+}
+
+.group{
+  :hover{
+    color: $basicColor;  
+  }
+
 }
 
 .ui[class*="vertically divided"].grid .row:before{
   height: 0px;
 }
 
-.categoryCard{
-  width: 100px;
-  height: 100px;
+.ui[class*="vertically divided"].grid .row {
+  background: white;
 }
 
-.ui.card {
-  margin:  0; 
+.subcatInfo{
+  text-align: end;
+  margin: 3%;
+  font-size: large;
+  display: inline-block;
+  align-self: flex-end;
+}
+
+.subcatInfoText{
+  color:white;
+}
+
+.categoryName{
+  margin: 3%;
+  font-size: x-large;
+  text-align: center;
+  font-weight: bold;
+  color: white;
 }
 
 .categoriesContainer{
-  width: 90%;
+  width:auto;
+  flex-wrap: wrap;
+  height: auto;
+  margin-bottom: 5% !important;
+  height:auto;
+  margin-left: 4% !important;
+  margin-right: 4% !important;
+  padding-top: 2%!important;
+  justify-content: center ;
+  align-items: center;
+}
+
+.categoryCard{
+  width: 400px !important;
+  height: 200px;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  margin-right: 40px !important; 
+  margin-left: 40px !important; 
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+}
+
+a{
   color: black;
+  :hover {
+  color: gray;
+}
+}
+
+.ui.inverted.menu .item, .ui.inverted.menu .item>a:not(.ui){
+  padding: 1px;
+}
+
+.ui.menu{
+  border-radius:0 !important;
+}
+
+.ui.grid{
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.h4{
+  margin: 0;
+  margin-block-start:0;
+}
+.ui .segment{
+  padding:0;
+}
+
+.productsContainer{
+  background: #D6D0D0;
+  margin-left: 8% !important;
+  margin-right: 8% !important;
+  margin-bottom: 5% !important;
+  justify-content: center ;
+  align-items: center;
 }
