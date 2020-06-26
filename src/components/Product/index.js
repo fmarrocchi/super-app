@@ -38,7 +38,7 @@ class Product extends Component {
     return ( 
       <Card className= "productCard">
         <Image src={this.loadImage()} />
-        <h2>
+        <h2 className="priceLabel">
           ${this.props.product.currentPrice} 
           <strike>{this.props.product.normalPrice}</strike>
         </h2>
@@ -49,8 +49,8 @@ class Product extends Component {
 
           {this.props.product.stock >0 ?
             <Popup
-              trigger={<a className="buyLabel" onClick={this.props.onBuyProduct}> COMPRAR </a>}
-              content={`${this.props.product.name} agregado!`}
+              trigger={<a className="buyButton" onClick={this.props.onBuyProduct}> COMPRAR </a>}
+              content={`${this.props.product.name} AGREGADO!`}
               on='click'
               open={this.state.isOpen}
               onClose={this.handleClose}

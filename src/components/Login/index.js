@@ -139,7 +139,7 @@ class Login extends Component {
                   <a>¿Olvido su contraseña?</a>
                 </List.Item>
                 <List.Item>
-                  <p>¿Es nuevo en Quiero En Casa? <Link to="/signup">Regístrese gratis</Link> </p>
+                  <p>¿Es nuevo en Quiero En Casa? <Link to="/signup" className="registerLabel">Regístrese gratis</Link> </p>
                 </List.Item>
               </List>
               <Grid>               

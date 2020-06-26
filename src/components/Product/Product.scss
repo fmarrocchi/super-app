@@ -1,5 +1,5 @@
 .ui.cards .card {
-  width: 280px;
+  width: 150px;
   margin: .8em 1.3em;
   align-content: center;
   text-align: center;
@@ -10,10 +10,16 @@
   font-weight: bold;
 }
 
-.buyLabel{
+.buyButton{
   font-weight: bold;
 }
 
 .ui.card, .ui.cards .card .content {
   text-align: right;
+}
+
+.priceLabel{
+  margin-block-start: 0;
+  margin-block-end: 0;
+  color:#4CA551;
 }

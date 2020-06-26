@@ -29,32 +29,59 @@ class SignUp extends Component {
     this.validateForm = this.validateForm.bind(this);
   }
 
-  validateForm() {
-    let valid = true;
-    let errors = {}
-    
-    if(!this.state.name){
-      valid=false;
-      errors['name'] = 'Please complete this field'
+  validateForm(name, phone, email, password) {
+    let valid = false;
+    let errors = {};
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if(!name){
+      errors['name'] = 'El campo es obligatorio.'
     }
+    else{
+      if(name.length>60){
+        errors['name'] = 'No se permiten más de 60 caracteres.'
+      }
       else{
-        if(!this.state.phone){
-          valid=false;
-          errors['phone'] = 'Please complete this field'
-        }
+        if (name.length < 5){
+          errors['name'] = 'Debe ingresar al menos 5 caracteres.'
+        } //chequear alphabetic name
           else{
-            if(!this.state.email){
-              valid=false;
-              errors['email'] = 'Please complete this field'
+            if(!phone){
+              errors['phone'] = 'Please complete this field'
             }
             else{
-              if(!this.state.password){
-                valid=false;
-                errors['password'] = 'Please complete this field'
+              if(!email) {
+                errors['email'] = 'Please complete this field'
+            }
+            else{
+              if (!re.test(email)){
+                errors['email'] = 'Debe ingresar un email válido.'
+              }
+              else{
+                if(!password){
+                  errors['password'] = 'Este campo es requerido.'
+                }
+                else{
+                  if (password.length >= 20){
+                    valid=false;
+                    errors['password'] = 'No se permiten mas de 20 caracteres.'
+                  }
+                  else{
+                    if (password.length < 8){
+                      valid=false;
+                      errors['password'] = 'Minimo 8 caracteres.'
+                    }
+                    else{
+                      valid=true
+                    }
+                  }            
+                }
               }
             }
           }
         }
+      }
+    }
     this.setState({
       errors: errors
     })   
@@ -64,8 +91,11 @@ class SignUp extends Component {
   onFormSubmit (event){
     event.preventDefault();
     const { name } = this.state;
+    let phone = this.state.phone;
+    let email = this.state.email;
+    let password = this.state.password;
 
-    if (this.validateForm()) {       
+    if (this.validateForm(name, phone, email, password)) {       
       this.setState( { 
         name:"", 
         phone:"", 
@@ -138,7 +168,7 @@ class SignUp extends Component {
                   onChange={this.handleChange} 
                   noValidate
                 />
-                <span style={{color: "grey"}}>Debe contener mínimo 6 caracteres.</span>
+                <span style={{color: "grey", fontStyle: "italic"}}>Debe contener mínimo 6 caracteres.</span>
                 <span style={{color: "red"}}>{errors["password"]}</span>
               </Form.Field>
 

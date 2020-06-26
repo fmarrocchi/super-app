@@ -39,29 +39,16 @@ export const fetchCatalog = () => async (dispatch, getState) => {
   })
 }
 
-export const fetchProducts = (cat, token) => async (dispatch) => {
+export const fetchGroups = (token) => async (dispatch) => {
   try {
-    let products = await api.get(`/products?categoryId=${cat}`, {token: {token}});
+    const groups = await api.get('/groups', {token: {token}});
     dispatch({
-      type: 'FETCH_PRODUCTS',
-      payload: {products: products.data}
-    });
+      type: 'FETCH_GROUPS',
+      payload: { groups: groups.data }
+    })
   }
   catch(err) {
-    dispatch({ type: 'FETCH_PRODUCTS_FAIL', payload: err }) 
-  }
-}
- 
-export const fetchProductsFilterbySubCat = (cat, subcat, token) => async (dispatch) => {
-  try { 
-    let productsbysubcat = await api.get(`/products?categoryId=${cat}&subcategoryId=${subcat}`, {token: {token}});
-    dispatch({
-      type: 'FETCH_PRODUCTS_BY_SUB_CAT',
-      payload: {productsbysubcat: productsbysubcat.data}
-    });
-  }
-  catch(err) {
-    dispatch({ type: 'FETCH_PRODUCTS_BY_SUB_CAT_FAIL', payload: err }) 
+    dispatch({ type: 'FETCH_GROUPS_FAIL', payload: err }) 
   }
 }
 
@@ -91,16 +78,29 @@ export const fetchSubCategories = (token, category) => async (dispatch) => {
   }
 }
 
-export const fetchGroups = (token) => async (dispatch) => {
-  try {
-    let groups = await api.get('/groups', token);
+export const fetchProductsFilterbySubCat = (cat, subcat, token) => async (dispatch) => {
+  try { 
+    let products = await api.get(`/products?categoryId=${cat}&subcategoryId=${subcat}`, {token: {token}});
     dispatch({
-      type: 'FETCH_GROUPS',
-      payload: {groups: groups.data}
+      type: 'FETCH_PRODUCTS_BY_SUB_CAT',
+      payload: {products: products.data}
     });
   }
   catch(err) {
-    dispatch({ type: 'FETCH_GROUPS_FAIL', payload: err }) 
+    dispatch({ type: 'FETCH_PRODUCTS_BY_SUB_CAT_FAIL', payload: err }) 
+  }
+}
+
+export const fetchProducts = (cat, token) => async (dispatch) => {
+  try {
+    let products = await api.get(`/products?categoryId=${cat}`, {token: {token}});
+    dispatch({
+      type: 'FETCH_PRODUCTS',
+      payload: {products: products.data}
+    });
+  }
+  catch(err) {
+    dispatch({ type: 'FETCH_PRODUCTS_FAIL', payload: err }) 
   }
 }
 

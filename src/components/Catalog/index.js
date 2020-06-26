@@ -52,7 +52,7 @@ class Catalog extends Component {
     this.state={
       selectedGroup: null,
       selectedCategory: null,
-      filter: null,
+      selectedSubCategory: null,
       cart: []
     }
     //bind methods
@@ -60,6 +60,7 @@ class Catalog extends Component {
     this.onSelectCategory = this.onSelectCategory.bind(this);
     this.onGetProducts = this.onGetProducts.bind(this);
     this.onBuyProduct = this.onBuyProduct.bind(this);
+    this.onGetSubcatProducts = this.onGetSubcatProducts.bind(this);
   }
 
   onGroupClick (e){    
@@ -69,7 +70,6 @@ class Catalog extends Component {
       selectedGroup: id,
       selectedCategory: null,
       selectedSubCategory: null,
-      imageUrl: null,
     })
   }
 
@@ -77,8 +77,8 @@ class Catalog extends Component {
     e.preventDefault();
     const cat = e.currentTarget.dataset.cat;   
     this.setState({
-      filter: null,
-      selectedSubCategory: cat
+      selectedCategory: cat,
+      selectedSubCategory: null
     })
     console.log("busco todos")    
   }
@@ -86,14 +86,12 @@ class Catalog extends Component {
   onGetSubcatProducts (e){    
     e.preventDefault();
     const cat = e.currentTarget.dataset.cat;
-    const subcat = e.currentTarget.dataset.subcat;    
-    if (subcat){
-      this.setState({
-        filter: subcat,
-        selectedSubCategory: cat
-      });
-      console.log("tengo filtro cat:"+ cat +" subcat: "+ subcat);      
-    }
+    const subcat = e.currentTarget.dataset.subcat;  
+    console.log("tengo filtro cat:"+ cat +" subcat: "+ subcat);     
+    this.setState({
+      selectedCategory: cat,
+      selectedSubCategory: subcat
+    })
   }
 
   onSelectCategory (e){    
@@ -118,8 +116,10 @@ class Catalog extends Component {
   componentDidMount() {
     if (!this.props.logged){
       this.props.history.push('/login')
+    }else{
+      this.props.fetchGroups(this.props.token); 
     }
-    this.props.fetchGroups(this.props.token); 
+    
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -175,10 +175,10 @@ class Catalog extends Component {
                {
               this.props.groups
                 .map((group, index) => { 
-                  return <div className="group" key={index} data-id={group.id}  onClick={this.onGroupClick} >
+                  return <div id="group" className="group" key={index} data-id={group.id}  onClick={this.onGroupClick} >
                             <a className="titleGroup" >
                               <Image src={images[group.id-1]}  circular/>
-                              <a>{group.name} </a>
+                              <label>{group.name} </label>
                             </a>
                           </div>
                 })    
@@ -206,7 +206,7 @@ class Catalog extends Component {
                               <a className="subcatInfoText" onClick={this.onGetProducts} >Todos</a> 
                             </div>                             
                             :
-                            <a className="categoryName">{category.name}</a>
+                            <label className="categoryName">{category.name}</label>
                           }  
                         </Card>
               })    
@@ -221,7 +221,6 @@ class Catalog extends Component {
                           key={index} 
                           product={product}
                           onBuyProduct = {()=> this.onBuyProduct(product)} 
-                          contextRef = {this.contextRef}
                        />
             })    
           }            
