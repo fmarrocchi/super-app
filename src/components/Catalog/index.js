@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Segment, Input, Responsive, Image, Card, Menu, Dropdown } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
-import { fetchProducts, fetchCategories, fetchGroups, fetchSubCategories, fetchProductsFilterbySubCat, buyProduct, logout, fetchProductsFilterbyName } from '../../actions/index';
+import { fetchProducts, fetchCategories, fetchGroups, fetchSubCategories, fetchProductsFilterbySubCat, buyProduct, logout, fetchProductsFilterbyName, loginUser } from '../../actions/index';
 import { connect } from 'react-redux';
 import Product from './../Product';
 
@@ -137,26 +137,38 @@ class Catalog extends Component {
 
   onBuyProduct(product){
     if (this.props.buyProduct(product)){
-      let newCart = [...this.state.cart, product.name]
+      let newCart = [...this.state.cart, product]
       this.setState({
         cart : newCart
       })    
-      console.log("carrito "+ this.state.cart);
+      console.log("carrito cantidad"+ this.state.cart.length);
     }
   }
 
   componentDidMount() {
-    if (!this.props.logged){
-    //  this.props.history.push('/')
-    }
-    else{
-      this.props.fetchGroups(this.props.token); 
-    }
+    if (! this.props.logged){
+      if (localStorage.getItem('token')){
+        let email = localStorage.getItem('email');
+        let pw = localStorage.getItem('password');
+        this.props.loginUser({"email": email, "password": pw});
+      }
+      else{
+        this.props.history.push('/')
+      }      
+    }    
+    this.props.fetchGroups(this.props.token); 
   }
 
   componentDidUpdate(prevProps, prevState){
-    if (! this.props.logged){
-     // this.props.history.push('/')
+    if (prevProps.logged !== this.props.logged && !this.props.logged){
+      if (localStorage.getItem('token')){
+        let email = localStorage.getItem('email');
+        let pw = localStorage.getItem('password');
+        this.props.loginUser({"email": email, "password": pw});
+      }
+      else{
+        this.props.history.push('/')
+      }      
     }
     if(prevState.selectedGroup !== this.state.selectedGroup){
       this.props.fetchCategories(this.props.token, this.state.selectedGroup);
@@ -179,10 +191,10 @@ class Catalog extends Component {
     return (  
       <div>      
           <Grid divided="vertically" textAlign='center' className= "catalogContainer" >   
-            <Menu fluid inverted className="ui fluid inverted borderless menu">
+            <Menu  inverted className="ui fluid inverted borderless menu">
                 <Menu.Item>
-                  <Dropdown icon= "align justify icon big">
-                      <Dropdown.Menu fluid className="verticalMenu">
+                  <Dropdown icon= "align justify big icon" >
+                      <Dropdown.Menu className="verticalMenu">
                         <Dropdown.Item className="verticalMenuItem" data-option="carrito" ><img src={commerce}/>Carrito</Dropdown.Item>
                         <Dropdown.Item className="verticalMenuItem" data-option="logout" onClick={this.onVerticalMenuClick}><img src={logoutImg}/>Log out</Dropdown.Item>
                       </Dropdown.Menu>
@@ -197,16 +209,20 @@ class Catalog extends Component {
                       <i aria-hidden="true" className="search icon"></i>
                     </Responsive>
                   </div>
-                  <Menu.Item ref={this.contextRef} className="item"><img src={commerce}/>
+                  <Menu.Item><img src={commerce}/>
                     <Dropdown>
                       <Dropdown.Menu className="verticalMenu">
-                          <Dropdown.Header content='Carrito de compras' />
-                            {this.state.cart.map((product) => (
-                              <Dropdown.Item className="verticalMenuItem" key={product} > {product} </Dropdown.Item>
-                            ))}
-                        </Dropdown.Menu>                    
+                        {this.state.cart.length > 0 ?                           
+                          this.state.cart.map((product) => (
+                            <Dropdown.Item className="verticalMenuItem" key={product.id} > {product.name} </Dropdown.Item>
+                          ))
+                        :
+                          <Dropdown.Item disabled > Aun no tiene elementos. </Dropdown.Item>
+                        }
+                      </Dropdown.Menu>                    
                     </Dropdown>                    
                   </Menu.Item>
+                                  
                 </Menu.Item>
               </Menu>
              
@@ -274,6 +290,7 @@ class Catalog extends Component {
 }
 
 const mapDispatchToProps = (dispatch)=> ({
+  loginUser: (user) => dispatch(loginUser(user)),
   fetchProducts: (cat, token) => dispatch(fetchProducts(cat, token)),
   fetchCategories: (token, id) => dispatch(fetchCategories(token, id)),
   fetchSubCategories: (token, id) => dispatch(fetchSubCategories(token, id)),

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Button, Input, Form, List } from 'semantic-ui-react';
 import { Link, Redirect } from 'react-router-dom';
-import { loginUser, fetchUser } from '../../actions/index';
+import { loginUser } from '../../actions/index';
 import { connect } from "react-redux";
 
 import './Login.scss';
@@ -81,10 +81,6 @@ class Login extends Component {
   } 
 
   componentDidUpdate(prevProps, prevState) {
-    if(prevProps !== this.props && this.props.token ){
-      let user = this.props.fetchUser( this.state.email, this.state.token);
-      console.log("hola "+ user.id)
-    }
     if (this.props.logged !== prevProps.logged && !this.props.logged ) {
       let errors = {};
       errors['login'] = 'Usuario o clave incorrecta. Por favor verifique sus datos.';
@@ -157,7 +153,6 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch)=> ({
   loginUser: (user) => dispatch(loginUser(user)),
-  fetchUser: (email, token) => dispatch(fetchUser(email, token))
 });
 const mapStateToProps = (state) => {
   return  {

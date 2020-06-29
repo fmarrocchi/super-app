@@ -10,9 +10,11 @@ export const loginUser = (user) => async (dispatch) => {
         token
       }
     });
-    //localStorage.setItem(JWT, token);
-    //history.pushState('/categories');
     dispatch({type: "LOGIN_SUCCESS"});
+    localStorage.setItem("token", token.data); 
+    localStorage.setItem("email", user.email);
+    localStorage.setItem("password", user.password);
+    dispatch(fetchUser(user.email, token.data));
   }
   catch(err) {
     dispatch({ type: 'LOGIN_FAIL' }) 
@@ -20,7 +22,9 @@ export const loginUser = (user) => async (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
-  //localStorage.removeItem(JWT);
+  localStorage.removeItem("token");
+  localStorage.removeItem("email");  
+  localStorage.removeItem("password");
   dispatch( { type: "LOGOUT"})
 }
 
