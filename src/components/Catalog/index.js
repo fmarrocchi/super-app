@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Grid, Segment, Input, Responsive, Image, Card, Menu } from 'semantic-ui-react';
+import { Grid, Segment, Input, Responsive, Image, Card, Menu, Dropdown } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
-import { fetchProducts, fetchCategories, fetchGroups, fetchSubCategories, fetchProductsFilterbySubCat, buyProduct } from '../../actions/index';
+import { fetchProducts, fetchCategories, fetchGroups, fetchSubCategories, fetchProductsFilterbySubCat, buyProduct, logout, fetchProductsFilterbyName } from '../../actions/index';
 import { connect } from 'react-redux';
 import Product from './../Product';
 
 //images and icons
 import commerce from './../../assets/icons/commerce.png';
+import logoutImg from './../../assets/icons/logout.png';
 import Group1 from './../../assets/icons/Group-1.png';
 import Group2 from './../../assets/icons/Group-2.png';
 import Group3 from './../../assets/icons/Group-3.png';
@@ -53,7 +54,8 @@ class Catalog extends Component {
       selectedGroup: null,
       selectedCategory: null,
       selectedSubCategory: null,
-      cart: []
+      cart: [],
+      searchProduct: null,
     }
     //bind methods
     this.onGroupClick = this.onGroupClick.bind(this);
@@ -61,6 +63,9 @@ class Catalog extends Component {
     this.onGetProducts = this.onGetProducts.bind(this);
     this.onBuyProduct = this.onBuyProduct.bind(this);
     this.onGetSubcatProducts = this.onGetSubcatProducts.bind(this);
+    this.onVerticalMenuClick = this.onVerticalMenuClick.bind(this);
+    this.onSearchProduct = this.onSearchProduct.bind(this);
+    this.onchangeSearch = this.onchangeSearch.bind(this);
   }
 
   onGroupClick (e){    
@@ -102,6 +107,34 @@ class Catalog extends Component {
     })
   }
 
+  onSearchProduct (e){    
+    e.preventDefault();
+    console.log("busco" + this.state.searchProduct);
+    this.props.fetchProductsFilterbyName(this.state.searchProduct, this.props.token);
+  }
+
+  onchangeSearch(e){
+    e.preventDefault();
+    let product = e.target.value;
+    this.setState({
+      searchProduct: product
+    })
+    console.log(product);
+  }
+
+  onVerticalMenuClick (e){   
+    e.preventDefault();
+    const option = e.currentTarget.dataset.option; 
+    switch (option){
+      case 1: console.log("seleccion de opcion menu 1"); break;
+      case 2: console.log("seleccion de opcion menu 2"); break;
+      case "logout": this.props.logout(); break;
+      default: {
+        return console.log("not valid option");
+      }
+    }
+  }
+
   onBuyProduct(product){
     if (this.props.buyProduct(product)){
       let newCart = [...this.state.cart, product.name]
@@ -110,21 +143,20 @@ class Catalog extends Component {
       })    
       console.log("carrito "+ this.state.cart);
     }
-    
   }
 
   componentDidMount() {
     if (!this.props.logged){
-      this.props.history.push('/login')
-    }else{
+    //  this.props.history.push('/')
+    }
+    else{
       this.props.fetchGroups(this.props.token); 
     }
-    
   }
 
   componentDidUpdate(prevProps, prevState){
     if (! this.props.logged){
-      this.props.history.push('/login')
+     // this.props.history.push('/')
     }
     if(prevState.selectedGroup !== this.state.selectedGroup){
       this.props.fetchCategories(this.props.token, this.state.selectedGroup);
@@ -144,25 +176,37 @@ class Catalog extends Component {
     let images = [Group1, Group2, Group3, Group4, Group5, Group6, Group7, Group8];
     let categoryImg = [cat1, cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10, cat11, cat12, cat13, cat14, cat15, cat16, cat17, cat18, cat19, cat20, cat21, cat22, cat23, cat24, cat25, cat26, cat27, cat28 ];
     
-    return (  /*  { this.props.logged == true ? 
-      :
-          <Redirect to={{
-          //  pathname: '/login'
-          }}/>
-        }*/
+    return (  
       <div>      
-          <Grid divided="vertically" textAlign='center' className= "catalogContainer" >     
-              <Menu compact className="ui fluid inverted borderless menu">
-                <Menu.Item className="item"> <i className="align justify icon big"></i> </Menu.Item>
+          <Grid divided="vertically" textAlign='center' className= "catalogContainer" >   
+            <Menu fluid inverted className="ui fluid inverted borderless menu">
+                <Menu.Item>
+                  <Dropdown icon= "align justify icon big">
+                      <Dropdown.Menu fluid className="verticalMenu">
+                        <Dropdown.Item className="verticalMenuItem" data-option="carrito" ><img src={commerce}/>Carrito</Dropdown.Item>
+                        <Dropdown.Item className="verticalMenuItem" data-option="logout" onClick={this.onVerticalMenuClick}><img src={logoutImg}/>Log out</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                </Menu.Item>
+
                 <Menu.Item className="item">¡ Hola {this.props.userinfo.name}!</Menu.Item>
                 <Menu.Item className="right menu">
                   <div className="item">
-                    <Responsive className="ui icon input icon">
-                      <Responsive as={Input} type="text" placeholder="Search..." />
+                    <Responsive className="ui icon input icon" onClick={this.onSearchProduct}>
+                      <Responsive as={Input} onChange={this.onchangeSearch} name="search" type="text" placeholder="Search..." />
                       <i aria-hidden="true" className="search icon"></i>
                     </Responsive>
                   </div>
-                  <Menu.Item ref={this.contextRef} className="item"><img src={commerce}/></Menu.Item>
+                  <Menu.Item ref={this.contextRef} className="item"><img src={commerce}/>
+                    <Dropdown>
+                      <Dropdown.Menu className="verticalMenu">
+                          <Dropdown.Header content='Carrito de compras' />
+                            {this.state.cart.map((product) => (
+                              <Dropdown.Item className="verticalMenuItem" key={product} > {product} </Dropdown.Item>
+                            ))}
+                        </Dropdown.Menu>                    
+                    </Dropdown>                    
+                  </Menu.Item>
                 </Menu.Item>
               </Menu>
              
@@ -188,7 +232,7 @@ class Catalog extends Component {
 
         <Card.Group className="categoriesContainer">
           {
-            this.props.categories
+            this.props.categories  // ToDo Falta agregar opacidad al clickear card
               .map((category, index) => {
                 return <Card                       
                           key={index}
@@ -235,7 +279,9 @@ const mapDispatchToProps = (dispatch)=> ({
   fetchSubCategories: (token, id) => dispatch(fetchSubCategories(token, id)),
   fetchGroups: (token) => dispatch(fetchGroups(token)),
   buyProduct: (product) => dispatch(buyProduct(product)),
+  logout: () => dispatch(logout()),
   fetchProductsFilterbySubCat: (cat, subcat, token) => dispatch(fetchProductsFilterbySubCat(cat,subcat,token)),
+  fetchProductsFilterbyName: (product, token) => dispatch(fetchProductsFilterbyName(product, token)),
 });
 const mapStateToProps = (state) => {
   return  {    

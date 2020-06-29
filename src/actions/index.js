@@ -91,6 +91,19 @@ export const fetchProductsFilterbySubCat = (cat, subcat, token) => async (dispat
   }
 }
 
+export const fetchProductsFilterbyName = (name, token) => async (dispatch) => {
+  try { 
+    let products = await api.get(`/products?name_like=${name}`, {token: {token}});
+    dispatch({
+      type: 'FETCH_PRODUCTS_BY_NAME',
+      payload: {products: products.data}
+    });
+  }
+  catch(err) {
+    dispatch({ type: 'FETCH_PRODUCTS_BY_NAME_FAIL', payload: err }) 
+  }
+}
+
 export const fetchProducts = (cat, token) => async (dispatch) => {
   try {
     let products = await api.get(`/products?categoryId=${cat}`, {token: {token}});

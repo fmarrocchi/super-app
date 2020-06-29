@@ -12,7 +12,7 @@ export default (state=initialState, action) => {
       return {...state, logged: false}
     }
     case "LOGOUT":{
-      return {...state, logged: false}
+      return {...state, logged: false, token: null }
     }
     case "LOGIN_SUCCESS":{
       return {...state, logged: true}

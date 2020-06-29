@@ -48,7 +48,7 @@ const searchFeatures = [
 ];
 
 const Home = () =>{
-  
+  //ToDo agregar rayas  rojas a los costados de los titulos
   return (
     <div>
       <Segment textAlign='center'  className= "signContainer">            
@@ -61,7 +61,7 @@ const Home = () =>{
         </Segment>     
 		
 		  <Segment placeholder className="aboutUsContainer" textAlign='center' >
-          <h3>SOBRE NOSOTROS </h3>
+          <h3>SOBRE NOSOTROS </h3>  
           <p>
             Ir al super, no tiene nada de super. Mejor desde casa! Ahorrá tiempo y dinero comprando las mejores marcas desde la comodidad de tu sofá. Nosotros nos preocupamos por conseguir el mejor precio del mercado, seleccionar un catalogo con todos los productos que vos necesites y nos obesecionamos por llevaarlos a tiempo, frescos y a muy buen precio hasta tu casa. 
           </p>

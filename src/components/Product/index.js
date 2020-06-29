@@ -35,6 +35,8 @@ class Product extends Component {
   }
   
   render () { 
+    //ToDo Falta: funcionalidad de agregar por gramos o incrementar la cantidad de unidades
+         
     return ( 
       <Card className= "productCard">
         <Image src={this.loadImage()} />
@@ -46,8 +48,8 @@ class Product extends Component {
           {this.props.product.name}
         </Card.Description>
         <Card.Content extra>
-
-          {this.props.product.stock >0 ?
+          
+           {this.props.product.stock >0 ?
             <Popup
               trigger={<a className="buyButton" onClick={this.props.onBuyProduct}> COMPRAR </a>}
               content={`${this.props.product.name} AGREGADO!`}

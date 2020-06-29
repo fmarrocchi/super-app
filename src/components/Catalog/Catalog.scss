@@ -119,6 +119,10 @@ $backgroundColor: #DCDCDC;
   display: flex;
   justify-content: flex-end;
 }
+.categoryCard:hover{
+    opacity: 0.3;
+  }
+
 
 a{
   color: black;
@@ -157,3 +161,19 @@ a{
   justify-content: center ;
   align-items: center;
 }
+
+.verticalMenu{  
+  background-color: #1b1c1d !important;
+  width: 200px;
+  margin-left: -15px !important;
+}
+.ui.menu .ui.dropdown .menu .item{
+  color: white !important;  
+}
+
+.ui.menu .ui.dropdown .menu .item:hover {
+  color: $basicColor !important;
+}
+
+
+

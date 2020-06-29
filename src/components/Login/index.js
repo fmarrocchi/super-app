@@ -99,7 +99,7 @@ class Login extends Component {
     return (
       <Grid textAlign='center'  className= "signContainer">     
             {this.props.logged==true ?
-              <Redirect to={{
+              <Redirect to={{  //Cambiar esto por history.push
                 pathname: '/catalog'
               }}/>
               : 
