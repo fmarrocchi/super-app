@@ -11,7 +11,7 @@ import twitter from './../../../assets/icons/twitter.png';
 const Footer = () =>{
   return (
     <div className="footer">
-      <Image.Group fluid className="footerLogos">
+      <Image.Group className="footerLogos">
         <Image inline centered src= {twitter}/>
         <Image inline centered src= {facebook}/>
         <Image inline centered src= {instagram}/>
